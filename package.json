@@ -1,0 +1,23 @@
+{
+  "name": "sea-shell-mead-year",
+  "version": "1.0.0",
+  "description": "Social Media API",
+  "main": "server.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jonacko/sea-shell-mead-year.git"
+  },
+  "author": "jonacko",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jonacko/sea-shell-mead-year/issues"
+  },
+  "homepage": "https://github.com/jonacko/sea-shell-mead-year#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^6.7.0"
+  }
+}
