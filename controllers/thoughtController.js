@@ -5,17 +5,18 @@ const { Thought, User } = require('../models');
 module.exports = {
   getThoughts(req, res) {
     Thought.find()
-      .then((thoughts) => res.json(thoughts))
+      .then((thoughts) => console.log(thoughts))
       .catch((err) => res.status(500).json(err));
   },
 
+  // getSingleThought
   getSingleThought(req, res) {
     Thought.findOne({ _id: req.params.thoughtId })
     .select('-__v')
       .then((thought) =>
         !thought
           ? res.status(404).json({ message: 'No Thought with that ID' })
-          : res.json(thought)
+          : console.log(thought)
       )
       .catch((err) => res.status(500).json(err));
   },
@@ -25,7 +26,7 @@ module.exports = {
       .then((thought) => {
         return User.findOneAndUpdate(
           { _id: req.body.userId },
-          { $addToSet: { Thoughts: thought._id } },
+          { $push: { thoughts: thought._id } },
           { new: true }
         );
       })
