@@ -1,29 +1,31 @@
-// This is all from activity 26
-
+// based on activity 26
 const { Thought, User } = require('../models');
 
+// getThoughts method
 module.exports = {
   getThoughts(req, res) {
     Thought.find()
-      .then((Thoughts) => res.json(Thoughts))
+      .then((thoughts) => res.json(thoughts))
       .catch((err) => res.status(500).json(err));
   },
+
   getSingleThought(req, res) {
-    Thought.findOne({ _id: req.params.ThoughtId })
-      .then((Thought) =>
-        !Thought
+    Thought.findOne({ _id: req.params.thoughtId })
+    .select('-__v')
+      .then((thought) =>
+        !thought
           ? res.status(404).json({ message: 'No Thought with that ID' })
-          : res.json(Thought)
+          : res.json(thought)
       )
       .catch((err) => res.status(500).json(err));
   },
-  // TODO: Add comments to the functionality of the createThought method
+  // createThought method
   createThought(req, res) {
     Thought.create(req.body)
-      .then((Thought) => {
+      .then((thought) => {
         return User.findOneAndUpdate(
           { _id: req.body.userId },
-          { $addToSet: { Thoughts: Thought._id } },
+          { $addToSet: { Thoughts: thought._id } },
           { new: true }
         );
       })
@@ -39,32 +41,32 @@ module.exports = {
         res.status(500).json(err);
       });
   },
-  // TODO: Add comments to the functionality of the updateThought method
+  // updateThought method
   updateThought(req, res) {
     Thought.findOneAndUpdate(
-      { _id: req.params.ThoughtId },
+      { _id: req.params.thoughtId },
       { $set: req.body },
       { runValidators: true, new: true }
     )
-      .then((Thought) =>
+      .then((thought) =>
         !Thought
           ? res.status(404).json({ message: 'No Thought with this id!' })
-          : res.json(Thought)
+          : res.json(thought)
       )
       .catch((err) => {
         console.log(err);
         res.status(500).json(err);
       });
   },
-  // TODO: Add comments to the functionality of the deleteThought method
+  // deleteThought method
   deleteThought(req, res) {
-    Thought.findOneAndRemove({ _id: req.params.ThoughtId })
+    Thought.findOneAndRemove({ _id: req.params.thoughtId })
       .then((Thought) =>
         !Thought
           ? res.status(404).json({ message: 'No Thought with this id!' })
           : User.findOneAndUpdate(
-              { Thoughts: req.params.ThoughtId },
-              { $pull: { Thoughts: req.params.ThoughtId } },
+              { Thoughts: req.params.thoughtId },
+              { $pull: { Thoughts: req.params.thoughtId } },
               { new: true }
             )
       )
@@ -77,7 +79,7 @@ module.exports = {
       )
       .catch((err) => res.status(500).json(err));
   },
-  // TODO: Add comments to the functionality of the addReaction method
+  // addReaction method
   addReaction(req, res) {
     Thought.findOneAndUpdate(
       { _id: req.params.ThoughtId },
@@ -87,21 +89,21 @@ module.exports = {
       .then((Thought) =>
         !Thought
           ? res.status(404).json({ message: 'No Thought with this id!' })
-          : res.json(Thought)
+          : res.json(thought)
       )
       .catch((err) => res.status(500).json(err));
   },
-  // TODO: Add comments to the functionality of the addReaction method
+  // deleteReaction method
   deleteReaction(req, res) {
     Thought.findOneAndUpdate(
-      { _id: req.params.ThoughtId },
+      { _id: req.params.thoughtId },
       { $pull: { Reactions: { ReactionId: req.params.ReactionId } } },
       { runValidators: true, new: true }
     )
       .then((Thought) =>
         !Thought
           ? res.status(404).json({ message: 'No Thought with this id!' })
-          : res.json(Thought)
+          : res.json(thought)
       )
       .catch((err) => res.status(500).json(err));
   },
