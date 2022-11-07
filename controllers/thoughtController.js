@@ -1,5 +1,5 @@
 // based on activity 26
-const { Thought, User } = require('../models');
+const { Thought, User, Reaction } = require('../models');
 
 // getThoughts method
 module.exports = {
@@ -83,14 +83,14 @@ module.exports = {
   // addReaction method
   addReaction(req, res) {
     Thought.findOneAndUpdate(
-      { _id: req.params.ThoughtId },
+      { _id: req.params.thoughtId },
       { $addToSet: { Reactions: req.body } },
       { runValidators: true, new: true }
     )
       .then((Thought) =>
         !Thought
           ? res.status(404).json({ message: 'No Thought with this id!' })
-          : res.json(thought)
+          : console.log(thought)
       )
       .catch((err) => res.status(500).json(err));
   },
