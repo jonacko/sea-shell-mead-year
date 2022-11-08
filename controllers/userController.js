@@ -56,17 +56,34 @@ updateUser(req, res) {
     });
 },
 
-  // Delete a user
-  deleteUser(req, res) {
-    User.findOneAndDelete({ _id: req.params.userId })
-      .then((user) =>
-        !user
-          ? res.status(404).json({ message: 'No user with that ID' })
-          : Thought.deleteMany({ _id: { $in: user.applications } })
-      )
-      .then(() => res.json({ message: 'User deleted!' }))
-      .catch((err) => res.status(500).json(err));
-  },
+  // // Delete a user
+  // deleteUser(req, res) {
+  //   User.findOneAndDelete({ _id: req.params.userId })
+  //     .then((user) =>
+  //       !user
+  //         ? res.status(404).json({ message: 'No user with that ID' })
+  //         : Thought.deleteMany({ _id: { $in: user.applications } })
+  //     )
+  //     .then(() => res.json({ message: 'User deleted!' }))
+  //     .catch((err) => res.status(500).json(err));
+  // },
+
+  // BONUS delete a user and thoughts
+  //   Delete user and users associated thoughts
+    deleteUser({ params }, res) {
+      Thought.deleteMany({ userId: params.thoughtId })
+        .then(() => {
+          User.findOneAndDelete({ userId: params.userId })
+            .then(dbUserData => {
+              if (!dbUserData) {
+                res.status(404).json({ message: 'No User found with this id' });
+                return;
+              }
+              res.status(200).json({ message: 'User deleted!' });
+            });
+        })
+        .catch(err => res.status(500).json(err));
+    },
 
 
 // create friend
