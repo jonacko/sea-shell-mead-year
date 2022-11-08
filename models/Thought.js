@@ -14,18 +14,18 @@ const thoughtSchema = new Schema(
         type: Date,
         default: Date.now,
       },
+      username: {
+        type: String,
+        required: true,
+      },
+      // Array of nested documents created with the reactionSchema
+      reactions: [reactionSchema],
     },
     {
       toJSON: {
         getters: true,
       },
       id: false,
-    username: {
-      type: String,
-      required: true,
-    },
-    // Array of nested documents created with the reactionSchema
-    reactions: [reactionSchema],
   }
 )
 
@@ -37,6 +37,6 @@ const thoughtSchema = new Schema(
 //     return this.reactions.length;
 //   });
 
-const Thought = model('thought', thoughtSchema);
+const Thought = model('Thoughts', thoughtSchema);
 
 module.exports = Thought;

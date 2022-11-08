@@ -1,9 +1,5 @@
 // based on activity 26
 
-// Need to add /api/users/:userId/friends/:friendId
-
-
-
 const { User, Thought } = require('../models');
 
 module.exports = {
@@ -28,12 +24,10 @@ module.exports = {
         path: 'friends',
         select: '-__v'
       })
-
-
       .then((user) =>
         !user
           ? res.status(404).json({ message: 'No user with that ID' })
-          : console.log(user)
+          : res.json(user)
       )
       .catch((err) => res.status(500).json(err));
   },
@@ -75,9 +69,7 @@ updateUser(req, res) {
   },
 
 
-
-
-
+// create friend
 // /api/users/:userid/friends/:friendId
 addFriend({ params }, res) {
   User.findOneAndUpdate(
